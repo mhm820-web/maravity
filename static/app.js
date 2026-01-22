@@ -64,16 +64,12 @@ async function loadLevels() {
 
 // 레벨 변경 시 범위 최대값 업데이트
 function updateRangeMax() {
-    const levelId = elements.printLevel.value;
-    const levelInfo = levelsData.find(l => l.id === levelId);
-
-    if (levelInfo) {
-        const maxVal = levelInfo.count;
-        elements.wordEnd.max = maxVal;
-        elements.wordStart.max = maxVal;
-        elements.meaningEnd.max = maxVal;
-        elements.meaningStart.max = maxVal;
-    }
+    // 레벨 데이터의 개수와 상관없이 최대 2000번까지 입력 가능하게 설정
+    const maxVal = 2000;
+    elements.wordEnd.max = maxVal;
+    elements.wordStart.max = maxVal;
+    elements.meaningEnd.max = maxVal;
+    elements.meaningStart.max = maxVal;
 }
 
 // 시험지 생성 (단어만 또는 뜻만)
@@ -120,13 +116,6 @@ async function generateWordList() {
 
         elements.wordInfo.textContent = `${levelName} - 시험지`;
         elements.printContent.innerHTML = html;
-
-        // 히스토리 저장
-        saveToHistory({
-            levelId, levelName, wordStart, wordEnd, meaningStart, meaningEnd, printType,
-            typeLabel: getTypeLabel(printType),
-            timestamp: new Date().toISOString()
-        });
 
         showScreen('print');
 
@@ -250,72 +239,6 @@ function getTypeLabel(printType) {
     return '시험지 (뜻 → 단어)';
 }
 
-// 히스토리 저장
-function saveToHistory(item) {
-    let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-    history.unshift(item);
-    if (history.length > 20) history = history.slice(0, 20);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-    renderHistory();
-}
-
-// 히스토리 렌더링
-function renderHistory() {
-    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-
-    if (history.length === 0) {
-        elements.historyList.innerHTML = '<p class="no-history">아직 히스토리가 없습니다.</p>';
-        return;
-    }
-
-    elements.historyList.innerHTML = history.map((item, index) => {
-        const date = new Date(item.timestamp);
-        const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-
-        return `
-            <div class="history-item" data-index="${index}">
-                <div class="history-info">
-                    <span class="history-level">${item.levelName}</span>
-                    <span class="history-range">단어: ${item.wordStart}~${item.wordEnd} / 뜻: ${item.meaningStart}~${item.meaningEnd}</span>
-                    <span class="history-type">${item.typeLabel}</span>
-                </div>
-                <div class="history-meta">
-                    <span class="history-date">${dateStr}</span>
-                    <button class="history-load-btn" data-index="${index}">불러오기</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    document.querySelectorAll('.history-load-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            loadFromHistory(parseInt(e.target.dataset.index));
-        });
-    });
-}
-
-// 히스토리에서 불러오기
-function loadFromHistory(index) {
-    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-    const item = history[index];
-    if (!item) return;
-
-    elements.printLevel.value = item.levelId;
-    elements.wordStart.value = item.wordStart;
-    elements.wordEnd.value = item.wordEnd;
-    elements.meaningStart.value = item.meaningStart;
-    elements.meaningEnd.value = item.meaningEnd;
-    elements.printType.value = item.printType;
-}
-
-// 히스토리 삭제
-function clearHistory() {
-    if (confirm('모든 히스토리를 삭제하시겠습니까?')) {
-        localStorage.removeItem(HISTORY_KEY);
-        renderHistory();
-    }
-}
-
 // 인쇄 실행
 function doPrint() {
     window.print();
@@ -344,9 +267,7 @@ elements.generateAnswerBtn.addEventListener('click', generateAnswerSheet);
 elements.doPrintBtn.addEventListener('click', doPrint);
 elements.backBtn.addEventListener('click', goBack);
 elements.printLevel.addEventListener('change', updateRangeMax);
-elements.clearHistoryBtn.addEventListener('click', clearHistory);
 
 // 초기화
 loadLevels();
 setupPresetButtons();
-renderHistory();
