@@ -32,12 +32,10 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 /* 헤더 */
@@ -83,145 +81,61 @@ body {
     }
 }
 
-/* 레벨 선택 */
-#level-select h2 {
-    text-align: center;
-    margin-bottom: 24px;
-    font-size: 1.3rem;
-    font-weight: 500;
-}
-
-.level-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.level-btn {
-    background: var(--bg-card);
-    border: 2px solid transparent;
-    border-radius: var(--border-radius);
-    padding: 24px 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.level-btn:hover {
-    border-color: var(--accent-primary);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(233, 69, 96, 0.2);
-}
-
-.level-btn .level-name {
-    display: block;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-}
-
-.level-btn .level-count {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.settings {
-    background: var(--bg-secondary);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.settings label {
-    color: var(--text-secondary);
-}
-
-.settings select {
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-/* 퀴즈 화면 */
-.quiz-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    padding: 16px 20px;
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius);
-}
-
-.quiz-header span {
-    font-weight: 500;
-}
-
-#score-display {
-    color: var(--success);
-}
-
-.quiz-card {
+/* 인쇄 설정 */
+.print-settings {
     background: var(--bg-card);
     border-radius: var(--border-radius);
-    padding: 40px 32px;
+    padding: 40px;
     box-shadow: var(--shadow);
-    margin-bottom: 20px;
 }
 
-.word-display {
+.print-settings h2 {
     text-align: center;
     margin-bottom: 32px;
-}
-
-#current-word {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 1.5rem;
     background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-.answer-section {
+.setting-group {
     display: flex;
-    gap: 12px;
-}
-
-#answer-input {
-    flex: 1;
-    background: var(--bg-secondary);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
     padding: 16px 20px;
-    font-size: 1.1rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+.setting-group label {
+    font-weight: 500;
     color: var(--text-primary);
-    transition: border-color 0.3s ease;
 }
 
-#answer-input:focus {
-    outline: none;
-    border-color: var(--accent-primary);
+.setting-group select {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: 200px;
 }
 
-#answer-input::placeholder {
-    color: var(--text-secondary);
+.button-group {
+    margin-top: 32px;
+    text-align: center;
 }
 
 /* 버튼 */
 .btn {
     border: none;
     border-radius: 12px;
-    padding: 16px 32px;
-    font-size: 1rem;
+    padding: 16px 40px;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -240,180 +154,32 @@ body {
 .btn-secondary {
     background: var(--bg-secondary);
     color: var(--text-primary);
-    width: 100%;
+    margin-left: 12px;
 }
 
 .btn-secondary:hover {
     background: var(--bg-card);
 }
 
-/* 피드백 */
-.feedback {
-    margin-top: 24px;
-    padding: 16px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 500;
-}
-
-.feedback.correct {
-    background: rgba(0, 210, 106, 0.15);
-    color: var(--success);
-}
-
-.feedback.wrong {
-    background: rgba(255, 71, 87, 0.15);
-    color: var(--error);
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* 결과 화면 */
-.result-card {
-    background: var(--bg-card);
-    border-radius: var(--border-radius);
-    padding: 40px;
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.result-card h2 {
-    margin-bottom: 24px;
-    font-size: 1.5rem;
-}
-
-.score-circle {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: var(--accent-gradient);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-}
-
-#final-score {
-    font-size: 3rem;
-    font-weight: 700;
-}
-
-.score-total {
-    font-size: 1.2rem;
-    opacity: 0.8;
-}
-
-.score-message {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-}
-
-.wrong-answers {
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    padding: 24px;
-    margin-bottom: 24px;
-}
-
-.wrong-answers h3 {
-    margin-bottom: 16px;
-    font-size: 1.1rem;
-    color: var(--error);
-}
-
-#wrong-list {
-    list-style: none;
-}
-
-#wrong-list li {
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+/* 인쇄 미리보기 */
+.print-header {
     display: flex;
     justify-content: space-between;
-}
-
-#wrong-list li:last-child {
-    border-bottom: none;
-}
-
-.wrong-word {
-    font-weight: 600;
-}
-
-.wrong-meaning {
-    color: var(--text-secondary);
-}
-
-#retry-btn {
-    width: 100%;
-}
-
-/* 반응형 */
-@media (max-width: 480px) {
-    .header h1 {
-        font-size: 2rem;
-    }
-
-    .level-grid {
-        grid-template-columns: 1fr;
-    }
-
-    #current-word {
-        font-size: 2rem;
-    }
-
-    .answer-section {
-        flex-direction: column;
-    }
-}
-
-/* 인쇄 섹션 */
-.print-section {
-    margin-top: 16px;
-    text-align: center;
-}
-
-.print-header {
+    align-items: center;
     margin-bottom: 24px;
-}
-
-.print-header h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
+    padding: 16px 20px;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
 }
 
 .print-controls {
     display: flex;
-    flex-wrap: wrap;
     gap: 12px;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-secondary);
-    padding: 20px;
-    border-radius: var(--border-radius);
 }
 
-.print-controls label {
+.word-info {
     color: var(--text-secondary);
-}
-
-.print-controls select {
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.print-controls .btn {
-    width: auto;
+    font-size: 0.95rem;
 }
 
 .print-content {
@@ -443,13 +209,13 @@ body {
 .word-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .word-table th,
 .word-table td {
     border: 1px solid #ddd;
-    padding: 10px 12px;
+    padding: 8px 12px;
     text-align: left;
 }
 
@@ -464,12 +230,12 @@ body {
 }
 
 .word-table .no-col {
-    width: 60px;
+    width: 50px;
     text-align: center;
 }
 
 .word-table .word-col {
-    width: 40%;
+    width: 35%;
     font-weight: 500;
 }
 
@@ -480,6 +246,37 @@ body {
 .word-table .blank-col {
     background: #fff;
     border: 1px dashed #ccc;
+    min-height: 24px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .print-settings {
+        padding: 24px;
+    }
+
+    .setting-group {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .setting-group select {
+        min-width: 100%;
+    }
+
+    .print-header {
+        flex-direction: column;
+        gap: 16px;
+    }
 }
 
 /* 인쇄 미디어 쿼리 */
@@ -509,7 +306,7 @@ body {
 
     .print-content {
         background: white !important;
-        padding: 20px !important;
+        padding: 10px !important;
         border-radius: 0 !important;
         max-height: none !important;
         overflow: visible !important;
@@ -517,6 +314,7 @@ body {
 
     .word-table {
         page-break-inside: auto;
+        font-size: 10pt;
     }
 
     .word-table tr {
@@ -528,5 +326,13 @@ body {
         background: #eee !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+    }
+
+    .print-title {
+        font-size: 16pt;
+    }
+
+    .print-subtitle {
+        font-size: 10pt;
     }
 }
