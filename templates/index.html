@@ -41,9 +41,9 @@
                 <div class="setting-group">
                     <label>뜻 범위:</label>
                     <div class="range-inputs">
-                        <input type="number" id="meaning-start" min="1" value="1" placeholder="시작">
+                        <input type="number" id="meaning-start" min="1" value="501" placeholder="시작">
                         <span>~</span>
-                        <input type="number" id="meaning-end" min="1" value="500" placeholder="끝">
+                        <input type="number" id="meaning-end" min="1" value="1000" placeholder="끝">
                         <span>번</span>
                     </div>
                 </div>
@@ -58,14 +58,17 @@
                 </div>
 
                 <div class="quick-range">
-                    <span>빠른 선택:</span>
-                    <button class="range-btn" data-start="1" data-end="500">1~500</button>
-                    <button class="range-btn" data-start="501" data-end="1000">501~1000</button>
-                    <button class="range-btn" data-start="1" data-end="1000">전체</button>
+                    <span>빠른 설정:</span>
+                    <button class="preset-btn" data-ws="1" data-we="500" data-ms="1" data-me="500">동일 (1~500)</button>
+                    <button class="preset-btn" data-ws="1" data-we="500" data-ms="501" data-me="1000">단어1~500 /
+                        뜻501~1000</button>
+                    <button class="preset-btn" data-ws="501" data-we="1000" data-ms="1" data-me="500">단어501~1000 /
+                        뜻1~500</button>
                 </div>
 
                 <div class="button-group">
-                    <button id="generate-btn" class="btn btn-primary">📄 단어장 생성</button>
+                    <button id="generate-btn" class="btn btn-primary">📄 시험지 생성</button>
+                    <button id="generate-answer-btn" class="btn btn-answer">📝 답안지 생성</button>
                 </div>
             </div>
 

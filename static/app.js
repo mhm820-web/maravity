@@ -1,10 +1,11 @@
 /**
  * 단어장 인쇄 프로그램 - JavaScript
- * 이중 범위 선택 (단어/뜻) + 히스토리 기능
+ * 이중 범위 선택 (단어/뜻) + 히스토리 + 답안지 기능
  */
 
 // 레벨 데이터 저장
 let levelsData = [];
+let lastGeneratedData = null; // 마지막 생성 데이터 저장
 
 // DOM 요소
 const elements = {
@@ -15,6 +16,7 @@ const elements = {
     meaningEnd: document.getElementById('meaning-end'),
     printType: document.getElementById('print-type'),
     generateBtn: document.getElementById('generate-btn'),
+    generateAnswerBtn: document.getElementById('generate-answer-btn'),
     doPrintBtn: document.getElementById('do-print-btn'),
     backBtn: document.getElementById('back-btn'),
     printContent: document.getElementById('print-content'),
@@ -74,16 +76,15 @@ function updateRangeMax() {
     }
 }
 
-// 단어장 생성
+// 시험지 생성 (단어만 또는 뜻만)
 async function generateWordList() {
     const levelId = elements.printLevel.value;
     const wordStart = parseInt(elements.wordStart.value) || 1;
     const wordEnd = parseInt(elements.wordEnd.value) || 500;
-    const meaningStart = parseInt(elements.meaningStart.value) || 1;
-    const meaningEnd = parseInt(elements.meaningEnd.value) || 500;
+    const meaningStart = parseInt(elements.meaningStart.value) || 501;
+    const meaningEnd = parseInt(elements.meaningEnd.value) || 1000;
     const printType = elements.printType.value;
 
-    // 범위 검증
     if (wordStart < 1 || wordEnd < wordStart || meaningStart < 1 || meaningEnd < meaningStart) {
         alert('올바른 범위를 입력하세요.');
         return;
@@ -108,120 +109,22 @@ async function generateWordList() {
         const words = wordData.words;
         const meanings = meaningData.words;
 
-        // 정보 표시
-        let infoText = `${levelName}`;
-        if (printType === 'full') {
-            infoText += ` - 단어: ${wordStart}~${wordEnd}번, 뜻: ${meaningStart}~${meaningEnd}번`;
-        } else if (printType === 'word-only') {
-            infoText += ` - 단어: ${wordStart}~${wordEnd}번 (${words.length}개)`;
-        } else {
-            infoText += ` - 뜻: ${meaningStart}~${meaningEnd}번 (${meanings.length}개)`;
-        }
-        elements.wordInfo.textContent = infoText;
+        // 마지막 생성 데이터 저장 (답안지용)
+        lastGeneratedData = {
+            levelId, levelName, wordStart, wordEnd, meaningStart, meaningEnd, printType,
+            words, meanings
+        };
 
-        // 제목 생성
-        let typeLabel = '';
-        if (printType === 'full') {
-            typeLabel = '단어장';
-        } else if (printType === 'word-only') {
-            typeLabel = '시험지 (단어 → 뜻)';
-        } else {
-            typeLabel = '시험지 (뜻 → 단어)';
-        }
+        // HTML 생성
+        let html = generateTableHTML(levelName, wordStart, wordEnd, meaningStart, meaningEnd, printType, words, meanings, false);
 
-        let html = `<h1 class="print-title">${levelName} ${typeLabel}</h1>`;
-
-        if (printType === 'full') {
-            html += `<p class="print-subtitle">단어: ${wordStart}~${wordEnd}번 / 뜻: ${meaningStart}~${meaningEnd}번</p>`;
-        } else if (printType === 'word-only') {
-            html += `<p class="print-subtitle">${wordStart}번 ~ ${wordEnd}번 (총 ${words.length}개)</p>`;
-        } else {
-            html += `<p class="print-subtitle">${meaningStart}번 ~ ${meaningEnd}번 (총 ${meanings.length}개)</p>`;
-        }
-
-        // 테이블 생성
-        html += '<table class="word-table">';
-
-        if (printType === 'full') {
-            html += `
-                <thead>
-                    <tr>
-                        <th class="no-col">No.</th>
-                        <th class="word-col">단어</th>
-                        <th class="meaning-col">뜻</th>
-                    </tr>
-                </thead>
-                <tbody>
-            `;
-            // 두 배열 중 더 긴 것 기준으로 순회
-            const maxLen = Math.max(words.length, meanings.length);
-            for (let i = 0; i < maxLen; i++) {
-                const word = words[i] ? words[i].word : '-';
-                const meaning = meanings[i] ? meanings[i].meaning : '-';
-                html += `
-                    <tr>
-                        <td class="no-col">${i + 1}</td>
-                        <td class="word-col">${word}</td>
-                        <td class="meaning-col">${meaning}</td>
-                    </tr>
-                `;
-            }
-        } else if (printType === 'word-only') {
-            html += `
-                <thead>
-                    <tr>
-                        <th class="no-col">No.</th>
-                        <th class="word-col">단어</th>
-                        <th class="meaning-col">뜻</th>
-                    </tr>
-                </thead>
-                <tbody>
-            `;
-            words.forEach((word, index) => {
-                html += `
-                    <tr>
-                        <td class="no-col">${wordStart + index}</td>
-                        <td class="word-col">${word.word}</td>
-                        <td class="meaning-col blank-col"></td>
-                    </tr>
-                `;
-            });
-        } else {
-            html += `
-                <thead>
-                    <tr>
-                        <th class="no-col">No.</th>
-                        <th class="word-col">단어</th>
-                        <th class="meaning-col">뜻</th>
-                    </tr>
-                </thead>
-                <tbody>
-            `;
-            meanings.forEach((word, index) => {
-                html += `
-                    <tr>
-                        <td class="no-col">${meaningStart + index}</td>
-                        <td class="word-col blank-col"></td>
-                        <td class="meaning-col">${word.meaning}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        html += '</tbody></table>';
-
+        elements.wordInfo.textContent = `${levelName} - 시험지`;
         elements.printContent.innerHTML = html;
 
         // 히스토리 저장
         saveToHistory({
-            levelId,
-            levelName,
-            wordStart,
-            wordEnd,
-            meaningStart,
-            meaningEnd,
-            printType,
-            typeLabel,
+            levelId, levelName, wordStart, wordEnd, meaningStart, meaningEnd, printType,
+            typeLabel: getTypeLabel(printType),
             timestamp: new Date().toISOString()
         });
 
@@ -232,24 +135,127 @@ async function generateWordList() {
     }
 }
 
+// 답안지 생성
+async function generateAnswerSheet() {
+    const levelId = elements.printLevel.value;
+    const wordStart = parseInt(elements.wordStart.value) || 1;
+    const wordEnd = parseInt(elements.wordEnd.value) || 500;
+    const meaningStart = parseInt(elements.meaningStart.value) || 501;
+    const meaningEnd = parseInt(elements.meaningEnd.value) || 1000;
+    const printType = elements.printType.value;
+
+    const levelInfo = levelsData.find(l => l.id === levelId);
+    const levelName = levelInfo ? levelInfo.name : levelId;
+
+    try {
+        const wordResponse = await fetch(`/api/words/${levelId}?start=${wordStart}&end=${wordEnd}`);
+        const wordData = await wordResponse.json();
+
+        const meaningResponse = await fetch(`/api/words/${levelId}?start=${meaningStart}&end=${meaningEnd}`);
+        const meaningData = await meaningResponse.json();
+
+        if (!wordData.success || !meaningData.success) {
+            alert('단어 로드 실패');
+            return;
+        }
+
+        const words = wordData.words;
+        const meanings = meaningData.words;
+
+        // 답안지 HTML 생성 (isAnswer = true)
+        let html = generateTableHTML(levelName, wordStart, wordEnd, meaningStart, meaningEnd, printType, words, meanings, true);
+
+        elements.wordInfo.textContent = `${levelName} - 답안지`;
+        elements.printContent.innerHTML = html;
+
+        showScreen('print');
+
+    } catch (error) {
+        alert('오류 발생: ' + error.message);
+    }
+}
+
+// 테이블 HTML 생성
+function generateTableHTML(levelName, wordStart, wordEnd, meaningStart, meaningEnd, printType, words, meanings, isAnswer) {
+    const docType = isAnswer ? '답안지' : '시험지';
+    let typeLabel = getTypeLabel(printType);
+
+    let html = `
+        <h1 class="print-title">${levelName} ${isAnswer ? '답안지' : typeLabel}</h1>
+        <p class="print-subtitle">단어: ${wordStart}~${wordEnd}번 / 뜻: ${meaningStart}~${meaningEnd}번</p>
+    `;
+
+    html += '<table class="word-table">';
+    html += `
+        <thead>
+            <tr>
+                <th class="no-col">No.</th>
+                <th class="word-col">단어</th>
+                <th class="meaning-col">뜻</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+    const maxLen = Math.max(words.length, meanings.length);
+
+    for (let i = 0; i < maxLen; i++) {
+        const word = words[i] ? words[i].word : '-';
+        const meaning = meanings[i] ? meanings[i].meaning : '-';
+
+        if (isAnswer) {
+            // 답안지: 모두 표시
+            html += `
+                <tr>
+                    <td class="no-col">${i + 1}</td>
+                    <td class="word-col">${word}</td>
+                    <td class="meaning-col">${meaning}</td>
+                </tr>
+            `;
+        } else if (printType === 'full') {
+            html += `
+                <tr>
+                    <td class="no-col">${i + 1}</td>
+                    <td class="word-col">${word}</td>
+                    <td class="meaning-col">${meaning}</td>
+                </tr>
+            `;
+        } else if (printType === 'word-only') {
+            html += `
+                <tr>
+                    <td class="no-col">${i + 1}</td>
+                    <td class="word-col">${word}</td>
+                    <td class="meaning-col blank-col"></td>
+                </tr>
+            `;
+        } else {
+            html += `
+                <tr>
+                    <td class="no-col">${i + 1}</td>
+                    <td class="word-col blank-col"></td>
+                    <td class="meaning-col">${meaning}</td>
+                </tr>
+            `;
+        }
+    }
+
+    html += '</tbody></table>';
+    return html;
+}
+
+// 유형 라벨 반환
+function getTypeLabel(printType) {
+    if (printType === 'full') return '단어장';
+    if (printType === 'word-only') return '시험지 (단어 → 뜻)';
+    return '시험지 (뜻 → 단어)';
+}
+
 // 히스토리 저장
 function saveToHistory(item) {
     let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-
-    // 최신 항목을 맨 앞에 추가
     history.unshift(item);
-
-    // 최대 20개까지만 저장
-    if (history.length > 20) {
-        history = history.slice(0, 20);
-    }
-
+    if (history.length > 20) history = history.slice(0, 20);
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-    renderHistory();
-}
-
-// 히스토리 불러오기
-function loadHistory() {
     renderHistory();
 }
 
@@ -281,11 +287,9 @@ function renderHistory() {
         `;
     }).join('');
 
-    // 불러오기 버튼 이벤트
     document.querySelectorAll('.history-load-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            loadFromHistory(index);
+            loadFromHistory(parseInt(e.target.dataset.index));
         });
     });
 }
@@ -294,7 +298,6 @@ function renderHistory() {
 function loadFromHistory(index) {
     const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
     const item = history[index];
-
     if (!item) return;
 
     elements.printLevel.value = item.levelId;
@@ -318,28 +321,26 @@ function doPrint() {
     window.print();
 }
 
-// 메인 화면으로 돌아가기
+// 메인 화면으로
 function goBack() {
     showScreen('main');
 }
 
-// 빠른 범위 선택 버튼
-function setupQuickRangeButtons() {
-    document.querySelectorAll('.range-btn').forEach(btn => {
+// 빠른 설정 버튼
+function setupPresetButtons() {
+    document.querySelectorAll('.preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            const start = btn.dataset.start;
-            const end = btn.dataset.end;
-            // 단어와 뜻 범위 모두 동일하게 설정
-            elements.wordStart.value = start;
-            elements.wordEnd.value = end;
-            elements.meaningStart.value = start;
-            elements.meaningEnd.value = end;
+            elements.wordStart.value = btn.dataset.ws;
+            elements.wordEnd.value = btn.dataset.we;
+            elements.meaningStart.value = btn.dataset.ms;
+            elements.meaningEnd.value = btn.dataset.me;
         });
     });
 }
 
 // 이벤트 리스너
 elements.generateBtn.addEventListener('click', generateWordList);
+elements.generateAnswerBtn.addEventListener('click', generateAnswerSheet);
 elements.doPrintBtn.addEventListener('click', doPrint);
 elements.backBtn.addEventListener('click', goBack);
 elements.printLevel.addEventListener('change', updateRangeMax);
@@ -347,5 +348,5 @@ elements.clearHistoryBtn.addEventListener('click', clearHistory);
 
 // 초기화
 loadLevels();
-setupQuickRangeButtons();
-loadHistory();
+setupPresetButtons();
+renderHistory();

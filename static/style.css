@@ -152,6 +152,28 @@ body {
     border-color: var(--accent-primary);
 }
 
+.preset-btn {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+    background: var(--accent-secondary);
+    border-color: var(--accent-primary);
+}
+
+.btn-answer {
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+    color: white;
+    margin-left: 12px;
+}
+
 .setting-group {
     display: flex;
     align-items: center;
