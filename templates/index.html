@@ -31,9 +31,19 @@
                 <div class="setting-group">
                     <label>단어 범위:</label>
                     <div class="range-inputs">
-                        <input type="number" id="start-num" min="1" value="1" placeholder="시작">
+                        <input type="number" id="word-start" min="1" value="1" placeholder="시작">
                         <span>~</span>
-                        <input type="number" id="end-num" min="1" value="500" placeholder="끝">
+                        <input type="number" id="word-end" min="1" value="500" placeholder="끝">
+                        <span>번</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>뜻 범위:</label>
+                    <div class="range-inputs">
+                        <input type="number" id="meaning-start" min="1" value="1" placeholder="시작">
+                        <span>~</span>
+                        <input type="number" id="meaning-end" min="1" value="500" placeholder="끝">
                         <span>번</span>
                     </div>
                 </div>
@@ -51,12 +61,21 @@
                     <span>빠른 선택:</span>
                     <button class="range-btn" data-start="1" data-end="500">1~500</button>
                     <button class="range-btn" data-start="501" data-end="1000">501~1000</button>
-                    <button class="range-btn" data-start="1" data-end="1000">전체 (1~1000)</button>
+                    <button class="range-btn" data-start="1" data-end="1000">전체</button>
                 </div>
 
                 <div class="button-group">
                     <button id="generate-btn" class="btn btn-primary">📄 단어장 생성</button>
                 </div>
+            </div>
+
+            <!-- 히스토리 섹션 -->
+            <div class="history-section">
+                <h3>📋 제작 히스토리</h3>
+                <div id="history-list" class="history-list">
+                    <!-- 히스토리 항목들이 동적으로 추가됨 -->
+                </div>
+                <button id="clear-history-btn" class="btn btn-small">히스토리 삭제</button>
             </div>
         </section>
 
