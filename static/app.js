@@ -14,7 +14,7 @@ const elements = {
     wordEnd: document.getElementById('word-end'),
     meaningStart: document.getElementById('meaning-start'),
     meaningEnd: document.getElementById('meaning-end'),
-    printType: document.getElementById('print-type'),
+    meaningEnd: document.getElementById('meaning-end'),
     generateBtn: document.getElementById('generate-btn'),
     generateAnswerBtn: document.getElementById('generate-answer-btn'),
     doPrintBtn: document.getElementById('do-print-btn'),
@@ -79,7 +79,8 @@ async function generateWordList() {
     const wordEnd = parseInt(elements.wordEnd.value) || 500;
     const meaningStart = parseInt(elements.meaningStart.value) || 501;
     const meaningEnd = parseInt(elements.meaningEnd.value) || 1000;
-    const printType = elements.printType.value;
+    // 시험지 생성은 기본적으로 '단어만' (word-only) 유형 사용
+    const printType = 'word-only';
 
     if (wordStart < 1 || wordEnd < wordStart || meaningStart < 1 || meaningEnd < meaningStart) {
         alert('올바른 범위를 입력하세요.');
@@ -131,7 +132,8 @@ async function generateAnswerSheet() {
     const wordEnd = parseInt(elements.wordEnd.value) || 500;
     const meaningStart = parseInt(elements.meaningStart.value) || 501;
     const meaningEnd = parseInt(elements.meaningEnd.value) || 1000;
-    const printType = elements.printType.value;
+    // 답안지 생성은 항상 '전체' (full) 유형 사용
+    const printType = 'full';
 
     const levelInfo = levelsData.find(l => l.id === levelId);
     const levelName = levelInfo ? levelInfo.name : levelId;
@@ -249,17 +251,7 @@ function goBack() {
     showScreen('main');
 }
 
-// 빠른 설정 버튼
-function setupPresetButtons() {
-    document.querySelectorAll('.preset-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            elements.wordStart.value = btn.dataset.ws;
-            elements.wordEnd.value = btn.dataset.we;
-            elements.meaningStart.value = btn.dataset.ms;
-            elements.meaningEnd.value = btn.dataset.me;
-        });
-    });
-}
+
 
 // 이벤트 리스너
 elements.generateBtn.addEventListener('click', generateWordList);
@@ -270,4 +262,4 @@ elements.printLevel.addEventListener('change', updateRangeMax);
 
 // 초기화
 loadLevels();
-setupPresetButtons();
+loadLevels();
