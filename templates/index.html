@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단어 시험 프로그램</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <h1>📚 단어 시험</h1>
+            <p class="subtitle">레벨별 영어 단어 학습</p>
+        </header>
+
+        <!-- 레벨 선택 화면 -->
+        <section id="level-select" class="screen active">
+            <h2>레벨을 선택하세요</h2>
+            <div class="level-grid" id="level-grid">
+                <!-- 레벨 버튼들이 동적으로 추가됨 -->
+            </div>
+            <div class="settings">
+                <label for="word-count">문제 수:</label>
+                <select id="word-count">
+                    <option value="5">5문제</option>
+                    <option value="10" selected>10문제</option>
+                    <option value="20">20문제</option>
+                    <option value="30">30문제</option>
+                    <option value="50">50문제</option>
+                    <option value="100">100문제</option>
+                    <option value="1000">1000문제 (전체)</option>
+                </select>
+            </div>
+            <div class="print-section">
+                <button id="print-btn" class="btn btn-secondary">🖨️ 인쇄용 단어장 만들기</button>
+            </div>
+        </section>
+
+        <!-- 인쇄용 단어장 화면 -->
+        <section id="print-view" class="screen">
+            <div class="print-header no-print">
+                <h2>📄 인쇄용 단어장</h2>
+                <div class="print-controls">
+                    <label for="print-level">레벨:</label>
+                    <select id="print-level"></select>
+                    <label for="print-type">유형:</label>
+                    <select id="print-type">
+                        <option value="full">단어 + 뜻</option>
+                        <option value="word-only">단어만 (시험지)</option>
+                        <option value="meaning-only">뜻만</option>
+                    </select>
+                    <button id="do-print-btn" class="btn btn-primary">🖨️ 인쇄하기</button>
+                    <button id="back-btn" class="btn btn-secondary">← 돌아가기</button>
+                </div>
+            </div>
+            <div id="print-content" class="print-content">
+                <!-- 인쇄 내용이 동적으로 추가됨 -->
+            </div>
+        </section>
+
+        <!-- 시험 화면 -->
+        <section id="quiz" class="screen">
+            <div class="quiz-header">
+                <span id="progress">1 / 10</span>
+                <span id="score-display">정답: 0</span>
+            </div>
+            <div class="quiz-card">
+                <div class="word-display">
+                    <span id="current-word">example</span>
+                </div>
+                <div class="answer-section">
+                    <input type="text" id="answer-input" placeholder="뜻을 입력하세요" autocomplete="off">
+                    <button id="submit-btn" class="btn btn-primary">확인</button>
+                </div>
+                <div id="feedback" class="feedback hidden">
+                    <span class="feedback-icon"></span>
+                    <span class="feedback-text"></span>
+                </div>
+            </div>
+            <button id="next-btn" class="btn btn-secondary hidden">다음 문제</button>
+        </section>
+
+        <!-- 결과 화면 -->
+        <section id="result" class="screen">
+            <div class="result-card">
+                <h2>시험 결과</h2>
+                <div class="score-circle">
+                    <span id="final-score">0</span>
+                    <span class="score-total">/ 10</span>
+                </div>
+                <p id="score-message" class="score-message"></p>
+            </div>
+            <div class="wrong-answers" id="wrong-answers">
+                <h3>틀린 문제</h3>
+                <ul id="wrong-list"></ul>
+            </div>
+            <button id="retry-btn" class="btn btn-primary">다시 시작</button>
+        </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
