@@ -29,10 +29,11 @@ def api_levels():
 
 @app.route('/api/words/<level_id>')
 def api_words(level_id):
-    """특정 레벨 단어 API"""
+    """특정 레벨 단어 API (범위 지정)"""
     try:
-        count = request.args.get('count', 10, type=int)
-        words = get_words_by_level(level_id, count)
+        start = request.args.get('start', 1, type=int)
+        end = request.args.get('end', 1000, type=int)
+        words = get_words_by_level(level_id, start, end)
         return jsonify({'success': True, 'words': words})
     except ValueError as e:
         return jsonify({'success': False, 'error': str(e)}), 404

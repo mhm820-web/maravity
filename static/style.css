@@ -99,6 +99,59 @@ body {
     background-clip: text;
 }
 
+/* 범위 입력 */
+.range-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.range-inputs input {
+    width: 80px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.range-inputs span {
+    color: var(--text-secondary);
+}
+
+/* 빠른 범위 선택 */
+.quick-range {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.quick-range span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.range-btn {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.range-btn:hover {
+    background: var(--accent-secondary);
+    border-color: var(--accent-primary);
+}
+
 .setting-group {
     display: flex;
     align-items: center;
