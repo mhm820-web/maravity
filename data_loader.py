@@ -11,26 +11,24 @@ import os
 EXCEL_FILE_PATH = 'data/단어장 레벨.xlsx'
 
 # 레벨 이름 매핑 (시트명 -> 표시 이름)
-# 난이도 순서: Phonics → Pre Let's → Ready To Talk → Let's Talk → Ready to Speak 
-#            → Let's Speak → Let's Express → Kopi Wang → Pre Junior → Junior Plus 
-#            → Senior Plus → Master → M.E.C → Bridge
+# 난이도 순서: Let's Talk → Let's Speak → Kopi Wang → Pre Junior → Junior Plus → Bridge
 LEVEL_NAMES = {
-    'BRIDGE_단어장': 'Bridge',
-    'JP_단어장': 'Junior Plus',
+    'LT_단어장': "Let's Talk",
+    'LS_단어장': "Let's Speak",
+    'KWLE_단어장': 'Kopi Wang',
     'PJ_단어장': 'Pre Junior',
-    'KWLE_단어장': 'Kopi Wang / Let\'s Express',
-    'LS_단어장': 'Let\'s Speak',
-    'LT_단어장': 'Let\'s Talk'
+    'JP_단어장': 'Junior Plus',
+    'BRIDGE_단어장': 'Bridge'
 }
 
 # 레벨 순서 (쉬운 것부터 어려운 순)
 LEVEL_ORDER = [
-    'LT_단어장',      # Let's Talk (초급)
-    'LS_단어장',      # Let's Speak (초중급)
-    'KWLE_단어장',    # Kopi Wang / Let's Express (중급)
-    'PJ_단어장',      # Pre Junior (중상급)
-    'JP_단어장',      # Junior Plus (상급)
-    'BRIDGE_단어장',  # Bridge (최상급)
+    'LT_단어장',      # Let's Talk
+    'LS_단어장',      # Let's Speak
+    'KWLE_단어장',    # Kopi Wang
+    'PJ_단어장',      # Pre Junior
+    'JP_단어장',      # Junior Plus
+    'BRIDGE_단어장',  # Bridge
 ]
 
 
